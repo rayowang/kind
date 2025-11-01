@@ -8,6 +8,9 @@ menu:
 description: |-
   This guide covers setting up [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) on a kind cluster.
 ---
+## Compatibility：
+This guide applies to kind v0.9.0+. For older versions, refer to historical docs to deploy third-party Ingress controllers.
+
 ## Setting Up An Ingress Controller
 
 Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster.
@@ -18,15 +21,16 @@ Ingress exposes HTTP and HTTPS routes from outside the cluster to services withi
 
 2. Deploy an Ingress controller, we document [Ingress NGINX](#ingress-nginx) here but other ingresses may work including [Contour](https://projectcontour.io/docs/main/guides/kind/) and Kong, you should follow their docs if you choose to use them.
 
-> **NOTE**: You may also want to consider using [Gateway API](https://gateway-api.sigs.k8s.io/) instead of Ingress.
-> Gateway API has an [Ingress migration guide](https://gateway-api.sigs.k8s.io/guides/migrating-from-ingress/).
+> **NOTE**: Since kind v0.9.0, the built-in cloud provider (cloud provider kind) natively supports Ingress. You do not need to deploy a third-party Ingress controller (e.g., Ingress NGINX, Contour) by default. If you have specific needs for third-party controllers, you can still follow their official docs to deploy.
+
+> **NOTE**: Since kind v0.9.0, Gateway API is also natively supported (along with Ingress). You may also want to consider using [Gateway API](https://gateway-api.sigs.k8s.io/) instead of Ingress.
+> See the official [Ingress migration guide](https://gateway-api.sigs.k8s.io/guides/migrating-from-ingress/) for details.
 
 ### Create Cluster
 
 #### Option 1: LoadBalancer
 
-Create a kind cluster and run [Cloud Provider KIND]
-to enable the loadbalancer controller which ingress-nginx will use through the loadbalancer API.
+Create a kind cluster. The built-in cloud provider (cloud provider kind, enabled by default since v0.9.0) will automatically enable the LoadBalancer controller for Ingress to use.
 
 {{< codeFromInline lang="bash" >}}
 kind create cluster
@@ -52,15 +56,10 @@ nodes:
 EOF
 {{< /codeFromInline >}}
 
-If you want to run with multiple nodes you must ensure that your ingress-controller is deployed on the same node where you have configured the PortMapping, in this example you can use a [nodeSelector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) to specify the control-plane node name.
-
-{{< codeFromInline lang="yaml" >}}
-nodeSelector:
-  kubernetes.io/hostname: "kind-control-plane"
-{{< /codeFromInline >}}
+If you want to run with multiple nodes, the built-in Ingress (since kind v0.9.0) will automatically use the configured PortMapping, no additional nodeSelector is required.
 
 ### Ingress NGINX
-
+#### Optional
 {{< codeFromInline lang="bash" >}}
 kubectl apply -f {{< absURL "examples/ingress/deploy-ingress-nginx.yaml" >}}
 {{< /codeFromInline >}}
