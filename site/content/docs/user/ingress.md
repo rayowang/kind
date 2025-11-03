@@ -9,7 +9,7 @@ description: |-
   This guide covers setting up [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) on a kind cluster.
 ---
 ## Compatibility：
-This guide applies to kind v0.9.0+. For older versions, refer to historical docs to deploy third-party Ingress controllers.
+This guide applies to [cloud-provider-kind](https://github.com/kubernetes-sigs/cloud-provider-kind) v0.9.0+. For older versions, refer to historical docs to deploy third-party Ingress controllers.
 
 ## Setting Up An Ingress Controller
 
