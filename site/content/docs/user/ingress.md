@@ -56,7 +56,13 @@ nodes:
 EOF
 {{< /codeFromInline >}}
 
-If you want to run with multiple nodes, the built-in Ingress (since kind v0.9.0) will automatically use the configured PortMapping, no additional nodeSelector is required.
+For multi-node clusters with `extraPortMapping`:
+- The built-in Ingress (via cloud-provider-kind, since v0.9.0) does not rely on `extraPortMapping` and works independently.
+- If you explicitly use a third-party Ingress controller (not recommended for most users), you may need to configure `nodeSelector` to ensure the controller runs on the node with port mappings:
+  {{< codeFromInline lang="yaml" >}}
+  nodeSelector:
+  kubernetes.io/hostname: "kind-control-plane"
+  {{< /codeFromInline >}}
 
 ### Ingress NGINX
 #### Optional
